@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>EventSource</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script type="text/javascript">
+            const getUsername = () => {
+                return document.getElementById('username').value;
+            };
+
+            const connectHandler = (username) => {
+                source = new EventSource(`/stream/${username}`);
+
+                source.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+
+                    console.log(data);
+                };
+
+                source.onerror = (event) => {
+                    console.error(event);
+                };
+            };
+
+            const disconnectHandler = () => {
+                source.close();
+            };
+        </script>
+    </head>
+    <body>
+        <div>
+            <input type="text" id="username" placement="Username">
+            <button type="button" onclick="connectHandler(getUsername())">Connect</button>
+            <button type="button" onclick="disconnectHandler()">Disconnect</button>
+        </div>
+    </body>
+</html>
