@@ -20,14 +20,10 @@ async def read_messages(username: str) -> AsyncIterable[str]:
         while True:
             message = await pubsub.get_message(ignore_subscribe_messages=True, timeout=30.0)
             if message is not None:
+                id = str(uuid.uuid4())
                 data = json.dumps(message["data"].decode())
 
-                yield "id: "
-                yield str(uuid.uuid4())
-                yield "event: message"
-                yield "\n"
-                yield f"data: {data}"
-                yield "\n\n"
+                yield f"id: {id}\nevent: message\ndata: {data}\n\n"
 
 
 async def send_messages():
